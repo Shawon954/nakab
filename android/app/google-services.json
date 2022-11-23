@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "666051820382",
+    "project_id": "nakab-e5bc0",
+    "storage_bucket": "nakab-e5bc0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666051820382:android:4a505df9af3dd3f0c3edcf",
+        "android_client_info": {
+          "package_name": "com.example.nakab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666051820382-bljurnonucic98lmbgm890oqm3dilg7h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nakab",
+            "certificate_hash": "3bb3d250dc98f495d0ed7172869f33afec22385f"
+          }
+        },
+        {
+          "client_id": "666051820382-sg3jd89tob14j2p9c7i5s6o12kf6mhha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFS95jsQk7gqg_TF4mHih2wjAqx5KLLd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666051820382-sg3jd89tob14j2p9c7i5s6o12kf6mhha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
