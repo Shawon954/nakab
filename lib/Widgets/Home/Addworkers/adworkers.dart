@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -12,7 +14,9 @@ class ADDWORKER extends StatefulWidget {
 class _ADDWORKERState extends State<ADDWORKER> {
   final _formkey = GlobalKey<FormState>();
 
-  submet() {
+
+
+  submit() {
     _formkey.currentState!.validate();
     _formkey.currentState!.save();
   }
@@ -25,7 +29,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
   TextEditingController _phonenumber = TextEditingController();
   TextEditingController _position = TextEditingController();
 
-  writedata() async{
+  writedata(submit) async{
     CollectionReference data = await FirebaseFirestore.instance.collection('UserData');
     data.add({
       'id':_qatarid.text,
@@ -95,10 +99,11 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _qatarid,
                         expands: false,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                        validator: (value) => value!.isEmpty ? 'ID Number cannot be blank':null,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
                           prefixIcon: Icon(
@@ -139,9 +144,10 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _fullname,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                        validator: (value) => value!.isEmpty ? 'Full Name cannot be blank':null,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
                           prefixIcon: Icon(
@@ -182,9 +188,10 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _passnumber,
                         expands: false,
+                        validator: (value) => value!.isEmpty ? 'Passport Number cannot be blank':null,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
@@ -226,10 +233,11 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _countryname,
                         expands: false,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                        validator: (value) => value!.isEmpty ? 'Country name cannot be blank':null,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
                           prefixIcon: Icon(
@@ -270,9 +278,10 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _currentaddress,
                         expands: false,
+                        validator: (value) => value!.isEmpty ? 'Current Address cannot be blank':null,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
@@ -314,10 +323,11 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _phonenumber,
                         keyboardType: TextInputType.number,
                         expands: false,
+                        validator: (value) => value!.isEmpty ? 'Phone Number cannot be blank':null,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
@@ -359,11 +369,14 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      child: TextField(
+                      child: TextFormField(
+
                         controller: _position,
                         expands: false,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                        validator: (value) => value!.isEmpty ? 'Position cannot be blank':null,
                         decoration: InputDecoration(
+
                           contentPadding: EdgeInsets.all(12.0),
                           prefixIcon: Icon(
                             Icons.person_add_alt,
@@ -394,7 +407,10 @@ class _ADDWORKERState extends State<ADDWORKER> {
                       width: 200,
                       child: NeumorphicButton(
                         margin: EdgeInsets.only(top: 12),
-                        onPressed: ()=>writedata(),
+                        onPressed: ()=>writedata(
+                            submit(),
+
+                        ),
                         style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           color: Colors.white,

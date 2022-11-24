@@ -39,6 +39,8 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.0.3
   flutter_neumorphic: ^3.2.0
+  url_launcher: ^6.1.7
+
 
   # FireBase #
   firebase_core: ^2.3.0
