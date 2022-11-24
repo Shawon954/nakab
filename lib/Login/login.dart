@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                     var userpass = _passcontroller.text;
                    final obj = AuthData();
                    obj.Singin(useremail,userpass);
-
+                   submithundel();
 
                   },
                   style: NeumorphicStyle(
