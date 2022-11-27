@@ -30,14 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Text(
-              'Nakhab',
-              style: TextStyle(
-                  fontSize: 36,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'GoudyBookletter1911.otf'),
-            ),
+            child: Image.asset('assets/splashlogo/nakab.png')
           )
         ],
       ),

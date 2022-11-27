@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -96,7 +98,7 @@ Future <void> addUser(selectaccount) async {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+         return Center(child: Lottie.asset('assets/lod/loading.json'));
         }
 
         return Scaffold(
