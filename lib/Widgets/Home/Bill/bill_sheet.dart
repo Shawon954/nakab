@@ -11,11 +11,16 @@ class SHEET extends StatefulWidget {
 }
 
 class _SHEETState extends State<SHEET> {
+
+  var sumTotal ;
+
+
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('UserData').snapshots();
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: _usersStream,
@@ -25,8 +30,10 @@ class _SHEETState extends State<SHEET> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
-          }
+
+
+          return Text("Loading");
+        }
 
           return Scaffold(
             body: ListView(
@@ -117,6 +124,14 @@ class _SHEETState extends State<SHEET> {
                               ),
                             ],
                           ),
+                          
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(onPressed: ()=>Get.toNamed('/salary'), child: Text('Salary'))
+                            ],
+                          )
+
                         ],
                       ),
                     ),
@@ -129,21 +144,6 @@ class _SHEETState extends State<SHEET> {
       ),
     );
 
-    //   SafeArea(
-    //     child: Scaffold(
-    //   body: Column(
-    //     children: [
-    //       Container(
-    //
-    //         height: Get.height/6,
-    //         width: double.maxFinite,
-    //         child: Card(
-    //           elevation: 5,
-    //
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // ));
+
+    }
   }
-}
