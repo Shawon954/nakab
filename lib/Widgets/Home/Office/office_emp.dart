@@ -1,17 +1,21 @@
-
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ADDWORKER extends StatefulWidget {
-  const ADDWORKER({Key? key}) : super(key: key);
+class OfficeEmplye extends StatefulWidget {
+  const OfficeEmplye({Key? key}) : super(key: key);
 
   @override
-  State<ADDWORKER> createState() => _ADDWORKERState();
+  State<OfficeEmplye> createState() => _OfficeEmplyeState();
 }
 
-class _ADDWORKERState extends State<ADDWORKER> {
+class _OfficeEmplyeState extends State<OfficeEmplye> {
+
   final _formkey = GlobalKey<FormState>();
 
 
@@ -19,39 +23,62 @@ class _ADDWORKERState extends State<ADDWORKER> {
   submit() {
     _formkey.currentState!.validate();
     _formkey.currentState!.save();
-    writedata;
   }
 
   TextEditingController _qatarid = TextEditingController();
   TextEditingController _fullname = TextEditingController();
+  TextEditingController _emailadd = TextEditingController();
   TextEditingController _passnumber = TextEditingController();
   TextEditingController _countryname = TextEditingController();
   TextEditingController _currentaddress = TextEditingController();
   TextEditingController _phonenumber = TextEditingController();
   TextEditingController _position = TextEditingController();
 
-  writedata(submit) async{
-    CollectionReference data = await FirebaseFirestore.instance.collection('UserData');
+  writedata() async{
+
+    File imgfile = File(_userimage!.path);
+    FirebaseStorage _storage= FirebaseStorage.instance;
+    UploadTask uploadTask = _storage.ref('UserImages').child(_userimage!.name).putFile(imgfile);
+
+    TaskSnapshot snapshot = await uploadTask;
+    imageUrl = await snapshot.ref.getDownloadURL();
+    print(imageUrl);
+
+
+    CollectionReference data = await FirebaseFirestore.instance.collection('Officeemployee');
     data.add({
       'id':_qatarid.text,
       'name':_fullname.text,
+      'email':_emailadd.text,
       'passport':_passnumber.text,
       'country':_countryname.text,
       'address':_currentaddress.text,
       'phone':_phonenumber.text,
       'position':_position.text,
+      'img':imageUrl,
     });
     print(data);
     _qatarid.clear();
     _fullname.clear();
+    _emailadd.clear();
     _passnumber.clear();
     _countryname.clear();
     _currentaddress.clear();
     _phonenumber.clear();
     _position.clear();
 
+    Navigator.pop(context);
+
   }
 
+  XFile? _userimage;
+  String? imageUrl;
+
+  choosegallery()async{
+    final ImagePicker _picker = ImagePicker();
+    _userimage = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {});
+  }
 
 
   @override
@@ -65,7 +92,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
               padding: const EdgeInsets.only(top: 30),
               child: Center(
                 child: Text(
-                  'Add Workers',
+                  'Office employee',
                   style: TextStyle(
                       fontSize: 30,
                       color: Colors.grey,
@@ -157,6 +184,50 @@ class _ADDWORKERState extends State<ADDWORKER> {
                           ),
                           hintText: 'Full Name',
                           labelText: 'Full Name',
+                          labelStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                          hintStyle: TextStyle(color: Colors.black54),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,),
+                  Container(
+                      decoration: ShapeDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFFe6dfd8), Color(0xFFf7f5ec)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0.0, 0.4],
+                          tileMode: TileMode.clamp,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                      ),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emailadd,
+                        style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                        validator: (value) => value!.isEmpty ? 'Full Name cannot be blank':null,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(12.0),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: Colors.black54,
+                          ),
+
+                          labelText: 'Email',
                           labelStyle: TextStyle(
                               color: Colors.grey,
                               fontSize: 20,
@@ -404,13 +475,31 @@ class _ADDWORKERState extends State<ADDWORKER> {
                     SizedBox(
                       height: 20,
                     ),
+                    Text('Upload Your Image'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                     Container(
+                       height: Get.height/5.5,
+                       width: Get.width/2.5,
+                       color: Colors.deepPurple,
+
+                         child: _userimage == null ?IconButton(
+                           icon: Icon(Icons.photo,color: Colors.white,), onPressed: ()=>choosegallery(),
+                         ):Image.file(File(_userimage!.path),
+                           fit: BoxFit.fill,
+                           width: 200,
+                         )
+                     ),
+
+                    SizedBox(
+                      height: 20,
+                    ),
                     SizedBox(
                       width: 200,
                       child: NeumorphicButton(
                         margin: EdgeInsets.only(top: 12),
-                        onPressed: ()=> submit(),
-
-
+                        onPressed: ()=>writedata(),
                         style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           color: Colors.white,

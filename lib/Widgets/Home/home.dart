@@ -1,11 +1,17 @@
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:nakab/Database/firebase.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -13,158 +19,112 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
+
+
+
   Future _singout()async{
     await FirebaseAuth.instance.signOut();
     Get.offAndToNamed('/loginpage');
   }
 
+
+
+   final userinfobox = GetStorage();
+
+   
+  
+  
   @override
   Widget build(BuildContext context) {
+    
+    
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 50),
-              child: Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  child: ClipOval(
-                    child: Image.asset(
-                      '',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 35,top: 50),
-              child: Row(
+                 Container(
+                   height: Get.height/2.2,
+                   width: double.infinity,
 
-                children: [
-                  Text(
-                    'Name : ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                  Text(
-                    ' Md.Shawon',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5,),
-            Padding(
-              padding: const EdgeInsets.only(left: 35, ),
-              child: Row(
+                   child: Padding(
+                     padding: const EdgeInsets.only(top: 30,left: 20),
+                     child: Column(
+                       children: [
+                            CircleAvatar(
+                              radius: 60,
+                              child:ClipOval(
+                                child: userinfobox.read('usrimage')
+                              ),
+                              ),
 
-                children: [
-                  Text(
-                    'Position : ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                  Text(
-                    'HRM',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5,),
-            Padding(
-              padding: const EdgeInsets.only(left: 35, ),
-              child: Row(
+                         Row(
+                           children: [
+                             Text("Name :${userinfobox.read('usrname')} ",
+                               style: TextStyle(
+                                   fontSize: 20,
+                                   color: Colors.grey,
+                                   letterSpacing: 1.5,
+                                   fontFamily: 'GoudyBookletter1911.otf',
+                                   fontWeight: FontWeight.bold),)
+                           ],
+                         ),
+                         SizedBox(height: 15,),
+                         Row(
+                           children: [
+                             Text("Position : ${userinfobox.read('usrposition')}",
+                               style: TextStyle(
+                                   fontSize: 20,
+                                   color: Colors.grey,
+                                   letterSpacing: 1.5,
+                                   fontFamily: 'GoudyBookletter1911.otf',
+                                   fontWeight: FontWeight.bold),)
+                           ],
+                         ),
+                         SizedBox(height: 15,),
+                         Row(
+                           children: [
+                             Text("ID : ${userinfobox.read('usrId')}",
+                               style: TextStyle(
+                                   fontSize: 18,
+                                   color: Colors.grey,
+                                   letterSpacing: 1.5,
 
-                children: [
-                  Text(
-                    'ID : ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                  Text(
-                    '56847299',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5,),
-            Padding(
-              padding: const EdgeInsets.only(left: 35, ),
-              child: Row(
+                                   fontWeight: FontWeight.bold),)
+                           ],
+                         ),
+                         SizedBox(height: 15,),
+                         Row(
+                           children: [
+                             Text("Call : ${userinfobox.read('usrcall')}",
+                               style: TextStyle(
+                                   fontSize: 18,
+                                   color: Colors.grey,
+                                   letterSpacing: 1.5,
 
-                children: [
-                  Text(
-                    'Passport : ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                  Text(
-                    'BD56847299',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5,),
-            Padding(
-              padding: const EdgeInsets.only(left: 35, ),
-              child: Row(
+                                   fontWeight: FontWeight.bold),)
+                           ],
+                         ),
+                         SizedBox(height: 15,),
+                         Row(
+                           children: [
+                             Text("Email : ${userinfobox.read('usremail')} ",
+                               style: TextStyle(
+                                   fontSize: 20,
+                                   color: Colors.grey,
+                                   letterSpacing: 1.5,
+                                   fontFamily: 'GoudyBookletter1911.otf',
+                                   fontWeight: FontWeight.bold),)
+                           ],
+                         ),
+                       ],
+                     ),
+                   ),
+                 ),
 
-                children: [
-                  Text(
-                    'Email : ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"),
-                  ),
-                  Text(
-                    'shawoncse954@gmail.com',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "GoudyBookletter1911.otf"
-                        ),
-                  ),
-                ],
-              ),
-            ),
+
             SizedBox(height: 15,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -173,11 +133,7 @@ class _HomePageState extends State<HomePage> {
                   width: 150,
                   child: NeumorphicButton(
                     margin: EdgeInsets.only(top: 12),
-                    onPressed: (){
-
-
-
-                    },
+                    onPressed: ()=>Get.toNamed('/officx'),
                     style: NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       color: Colors.white,
@@ -287,6 +243,33 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            SizedBox(
+              width: 150,
+              child: NeumorphicButton(
+                margin: EdgeInsets.only(top: 12),
+                onPressed: ()=>Get.toNamed('/imgset'),
+                style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  color: Colors.white,
+                  boxShape:
+                  NeumorphicBoxShape.roundRect(BorderRadius.circular(8)),
+                  //border: NeumorphicBorder()
+                ),
+                padding: EdgeInsets.all(12.0),
+                child: Center(
+                  child: Text(
+                    "ImageSet",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                        letterSpacing: 1.5,
+                        fontFamily: 'GoudyBookletter1911.otf',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+
             SizedBox(height: Get.height/6,),
             SizedBox(
               width: 250,

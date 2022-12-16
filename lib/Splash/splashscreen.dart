@@ -11,6 +11,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final box = GetStorage();
+
   chooseScreen(){
      var UserID = box.read('id');
     if(UserID!= null){
@@ -20,6 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
       return Get.offAndToNamed('/loginpage');
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {

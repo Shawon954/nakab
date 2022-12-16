@@ -1,57 +1,93 @@
-
-
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-class ADDWORKER extends StatefulWidget {
-  const ADDWORKER({Key? key}) : super(key: key);
+import 'package:image_picker/image_picker.dart';
+
+class SingUP extends StatefulWidget {
+
+
 
   @override
-  State<ADDWORKER> createState() => _ADDWORKERState();
+  State<SingUP> createState() => _SingUPState();
 }
 
-class _ADDWORKERState extends State<ADDWORKER> {
+class _SingUPState extends State<SingUP> {
+
+
+  final userinfobox = GetStorage();
+
   final _formkey = GlobalKey<FormState>();
 
 
 
-  submit() {
-    _formkey.currentState!.validate();
-    _formkey.currentState!.save();
-    writedata;
-  }
-
   TextEditingController _qatarid = TextEditingController();
   TextEditingController _fullname = TextEditingController();
-  TextEditingController _passnumber = TextEditingController();
-  TextEditingController _countryname = TextEditingController();
-  TextEditingController _currentaddress = TextEditingController();
+  TextEditingController _emailadd = TextEditingController();
   TextEditingController _phonenumber = TextEditingController();
   TextEditingController _position = TextEditingController();
 
-  writedata(submit) async{
-    CollectionReference data = await FirebaseFirestore.instance.collection('UserData');
+  writedata() async{
+
+    File imgfile = File(_userimage!.path);
+    FirebaseStorage _storage= FirebaseStorage.instance;
+    UploadTask uploadTask = _storage.ref('UserImages').child(_userimage!.name).putFile(imgfile);
+
+    TaskSnapshot snapshot = await uploadTask;
+    imageUrl = await snapshot.ref.getDownloadURL();
+    print(imageUrl);
+
+
+
+
+    CollectionReference data = await FirebaseFirestore.instance.collection('myinformation');
     data.add({
+
       'id':_qatarid.text,
       'name':_fullname.text,
-      'passport':_passnumber.text,
-      'country':_countryname.text,
-      'address':_currentaddress.text,
+      'email':_emailadd.text,
       'phone':_phonenumber.text,
       'position':_position.text,
+
+
     });
     print(data);
     _qatarid.clear();
     _fullname.clear();
-    _passnumber.clear();
-    _countryname.clear();
-    _currentaddress.clear();
+    _emailadd.clear();
     _phonenumber.clear();
     _position.clear();
 
+    Navigator.pop(context);
+
   }
 
+  XFile? _userimage;
+  String? imageUrl;
+
+  choosegallery()async{
+    final ImagePicker _picker = ImagePicker();
+    _userimage = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {});
+  }
+
+
+
+ 
+      datapass(){
+
+    if(userinfobox == null ){
+      print('empty');
+    } else if(userinfobox != null){
+      Get.toNamed('/homepage');
+    }
+
+
+      }
 
 
   @override
@@ -65,7 +101,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
               padding: const EdgeInsets.only(top: 30),
               child: Center(
                 child: Text(
-                  'Add Workers',
+                  'My Information',
                   style: TextStyle(
                       fontSize: 30,
                       color: Colors.grey,
@@ -75,14 +111,14 @@ class _ADDWORKERState extends State<ADDWORKER> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 70, right: 70),
+              padding: EdgeInsets.only(left: 70, right: 70),
               child: Divider(
                 thickness: 1.2,
                 color: Colors.grey,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15,right: 15,top: 30),
+              padding: EdgeInsets.only(left: 15,right: 15,top: 30),
               child: Form(
                 key: _formkey,
                 child: Column(
@@ -111,7 +147,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
                             Icons.numbers,
                             color: Colors.black54,
                           ),
-                          hintText: 'ID Number',
+
                           labelText: 'Qatar ID',
                           labelStyle: TextStyle(
                               color: Colors.grey,
@@ -155,7 +191,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
                             Icons.person,
                             color: Colors.black54,
                           ),
-                          hintText: 'Full Name',
+
                           labelText: 'Full Name',
                           labelStyle: TextStyle(
                               color: Colors.grey,
@@ -174,8 +210,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
                       ),
                     ),
                     SizedBox(
-                      height: 15,
-                    ),
+                      height: 15,),
                     Container(
                       decoration: ShapeDecoration(
                         gradient: LinearGradient(
@@ -190,18 +225,18 @@ class _ADDWORKERState extends State<ADDWORKER> {
                         ),
                       ),
                       child: TextFormField(
-                        controller: _passnumber,
-                        expands: false,
-                        validator: (value) => value!.isEmpty ? 'Passport Number cannot be blank':null,
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emailadd,
                         style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                        validator: (value) => value!.isEmpty ? 'Full Name cannot be blank':null,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(12.0),
                           prefixIcon: Icon(
-                            Icons.book_online_outlined,
+                            Icons.email,
                             color: Colors.black54,
                           ),
-                          hintText: 'Passport Number',
-                          labelText: 'Passport Number',
+
+                          labelText: 'Email',
                           labelStyle: TextStyle(
                               color: Colors.grey,
                               fontSize: 20,
@@ -221,96 +256,12 @@ class _ADDWORKERState extends State<ADDWORKER> {
                     SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      decoration: ShapeDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xFFe6dfd8), Color(0xFFf7f5ec)],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.0, 0.4],
-                          tileMode: TileMode.clamp,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                      child: TextFormField(
-                        controller: _countryname,
-                        expands: false,
-                        style: TextStyle(fontSize: 20.0, color: Colors.black54),
-                        validator: (value) => value!.isEmpty ? 'Country name cannot be blank':null,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(12.0),
-                          prefixIcon: Icon(
-                            Icons.location_city,
-                            color: Colors.black54,
-                          ),
-                          hintText: 'Country Name',
-                          labelText: 'Country Name',
-                          labelStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                          hintStyle: TextStyle(color: Colors.black54),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                    ),
+
                     SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      decoration: ShapeDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xFFe6dfd8), Color(0xFFf7f5ec)],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.0, 0.4],
-                          tileMode: TileMode.clamp,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                      child: TextFormField(
-                        controller: _currentaddress,
-                        expands: false,
-                        validator: (value) => value!.isEmpty ? 'Current Address cannot be blank':null,
-                        style: TextStyle(fontSize: 20.0, color: Colors.black54),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(12.0),
-                          prefixIcon: Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.black54,
-                          ),
-                          hintText: 'Current Address',
-                          labelText: 'Current Address',
-                          labelStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                          hintStyle: TextStyle(color: Colors.black54),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
+
+
                     Container(
                       decoration: ShapeDecoration(
                         gradient: LinearGradient(
@@ -336,7 +287,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
                             Icons.call,
                             color: Colors.red,
                           ),
-                          hintText: 'Phone Number',
+
                           labelText: 'Phone Number',
                           labelStyle: TextStyle(
                               color: Colors.grey,
@@ -383,7 +334,7 @@ class _ADDWORKERState extends State<ADDWORKER> {
                             Icons.person_add_alt,
                             color: Colors.black54,
                           ),
-                          hintText: 'Position',
+
                           labelText: 'Position',
                           labelStyle: TextStyle(
                               color: Colors.grey,
@@ -404,13 +355,24 @@ class _ADDWORKERState extends State<ADDWORKER> {
                     SizedBox(
                       height: 20,
                     ),
+
                     SizedBox(
                       width: 200,
                       child: NeumorphicButton(
                         margin: EdgeInsets.only(top: 12),
-                        onPressed: ()=> submit(),
+                        onPressed: () {
 
-
+                           if(_formkey.currentState!.validate()){
+                            Get.toNamed('/homepage');
+                            
+                            userinfobox.write('usrname', _fullname.text);
+                            userinfobox.write('usrId', _qatarid.text);
+                            userinfobox.write('usrposition', _position.text);
+                            userinfobox.write('usrcall', _phonenumber.text);
+                            userinfobox.write('usremail', _emailadd.text);
+                           }
+                            _formkey.currentState!.save();
+                              },
                         style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           color: Colors.white,

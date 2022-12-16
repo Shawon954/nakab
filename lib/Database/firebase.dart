@@ -29,7 +29,7 @@ class AuthData{
            snackPosition: SnackPosition.TOP,
            isDismissible: true,
            forwardAnimationCurve: Curves.easeOutBack,);
-        return Get.offAndToNamed('/homepage');
+           return Get.toNamed('/UP');
 
 
       }
